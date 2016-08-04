@@ -1,0 +1,17 @@
+bookshelf
+bottle
+building
+car
+chair
+cup
+electronic component storage
+jaguar
+minik
+monitor
+others
+person
+road
+table
+tree
+turtlebot
+window
