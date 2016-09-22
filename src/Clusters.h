@@ -33,6 +33,7 @@
 
 #include <vector>
 #include <string>
+#include <sstream>
 
 class Clusters
 {
@@ -80,4 +81,7 @@ class Clusters
 
     // txt file used for saving the labels
 	  char* txtfile_name;
+
+		// Random string generator
+		static void gen_random(char *s, const int len);
 };

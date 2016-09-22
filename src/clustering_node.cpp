@@ -22,13 +22,11 @@
 
 using namespace std;
 
-ros::Publisher pub;
-
 // Clusters instance
 Clusters clusters(1000.0,
 "/home/turtlebot2/cagatay_ws/src/object_recognition/others_labels.txt",
 5,
-0.75);
+0.90);
 
 // Queue for filenames
 queue<string> filenames_queue;
@@ -45,46 +43,6 @@ vector<string> split(string str, char delimiter) {
 
   return internal;
 }
-
-// Caffe & Nvidia Digits handler : Object Recognition
-void matchScore(const char* filename1, const char* filename2)
-{
-	std::stringstream command;
-
-	command << "/home/turtlebot2/cagatay_ws/src/object_recognition/src/deepmatching_1.0.2_c++/deepmatching-static "
-	<< "/home/turtlebot2/cagatay_ws/src/object_recognition/model/snapshot_iter_399000.caffemodel "
-	<< "/home/turtlebot2/cagatay_ws/src/object_recognition/model/deploy.prototxt "
-	<< filename1
-	<< " --mean /home/turtlebot2/cagatay_ws/src/object_recognition/model/mean.binaryproto"
-	<< " --labels /home/turtlebot2/cagatay_ws/src/object_recognition/model/labels.txt"
-	<< " --nogpu";
-
-	//std::system(command.str().c_str());
-
-	// Send the command and get result from object recognition script
-	FILE *f = popen(command.str().c_str(), "r");
-
-	char label[1024];
-
-	fgets(label, sizeof(label), f);
-
-	pclose(f);
-
-	// Prepare the message
-
-	std_msgs::String msg;
-
-	std::stringstream ss;
-
-	ss << label;
-
-	msg.data = ss.str();
-
-	// Publish it to the space and wait for some alien to hear it
-
-	pub.publish(msg);
-}
-
 
 // Call back for fixation points
 void fixationCallBack(const std_msgs::String::ConstPtr& msg)

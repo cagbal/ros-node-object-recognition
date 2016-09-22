@@ -39,12 +39,33 @@ Clusters::Clusters(float _similarity_threshold,
 	Clusters::hist_score_thresh = _hist_score_threshold;
 }
 
+void Clusters::gen_random(char *s, const int len) {
+    static const char alphanum[] =
+        "0123456789"
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        "abcdefghijklmnopqrstuvwxyz";
+
+    for (int i = 0; i < len; ++i) {
+        s[i] = alphanum[rand() % (sizeof(alphanum) - 1)];
+    }
+
+    s[len] = 0;
+}
+
 
 void Clusters::runClustering(std::string filename)
 {
 
 	// Read the image
 	cv::Mat im = cv::imread(filename, CV_LOAD_IMAGE_COLOR);
+
+  // Check if an image is empty
+	if((im.cols < 1)||(im.rows < 1))
+  {
+		std::cout << "File reading error!" << std::endl;
+
+		return;
+	}
 
 	// Resize the image
 	cv::Mat resized_im;
@@ -74,6 +95,12 @@ void Clusters::runClustering(std::string filename)
 
 		// Push filename to the list
     Clusters::filenames.push_back(filename);
+
+		std::stringstream ss;
+
+		ss << "/home/turtlebot2/data/training_cluster/results_05_08_2016_pc/" << labels.back() <<  "/" << "fix" <<  ".jpg";
+
+		cv::imwrite(ss.str(), im);
 
 		return;
 	}
@@ -143,6 +170,16 @@ void Clusters::runClustering(std::string filename)
 		"Filename: " << filename << std::endl <<
 		"Label: " <<  labels.back() <<
 		std::endl;
+
+	std::stringstream ss;
+
+	char *fname;
+
+	//Clusters::gen_random(fname, 6);
+
+	ss << "/home/turtlebot2/data/training_cluster/results_05_08_2016_pc/" << labels.back() <<  "/" << "fix" << std::rand() % 100 << std::rand() % 100 <<  std::rand() % 100 <<  ".jpg";
+
+	cv::imwrite(ss.str(), im);
 
 
 	return;
